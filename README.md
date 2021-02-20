@@ -125,7 +125,6 @@ $ bpsendfile ipn:2.1 ipn:1.1 name_of_image.jpeg
 
 Server 1
 ````
-$ ionstart -I host1.rc
 $ python3 vision.py
 ````
 
