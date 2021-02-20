@@ -52,22 +52,25 @@ The `vision.py` file formats your request information, like the request type and
 
 ```python
 def run_quickstart():
-    # [START vision_quickstart]
-    import io
     import os
-    import shutil
-    from datetime import datetime
+import shutil
+import os.path
+import time
+import io
+from datetime import datetime
     # Imports the Google Cloud client library
     # [START vision_python_migration_import]
-    from google.cloud import vision
-    # [END vision_python_migration_import]
+from google.cloud import vision
 
-    #Check if testfile1 was received from host 1
+os.system('killm')
+os.system('ionstart -I host1.rc')
+    
     if os.path.exists("testfile1"):
         print("Executing Vision API...")
         now = datetime.now()
-        # [START vision_python_migration_client]
+
         client = vision.ImageAnnotatorClient()
+        # [END vision_python_migration_client]
 
         # The name of the image file to annotate
         file_name = os.path.abspath('testfile1')
@@ -85,13 +88,23 @@ def run_quickstart():
         os.system(f"echo Identified '{x}' Labels in the image...")
         print("Sending Labels via DTN...")
         for label in labels:
-            #Send labels to host 2 via DTN
+        #Send the number of image labels to host 2
             os.system(f'echo "{label.description}" | bpsource ipn:2.1')
+ 
         name = "file" + str(int(datetime.timestamp(now)))
         os.rename('testfile1',name) 
-        path =  "/home/usr/ion-open-source-4.0.1/dtn/processed/"
-        shutil.move(name, path)
-
+        path =  "/home/larissasuzuki/ion-open-source-4.0.1/dtn/processed/"
+    
+    else:
+        print("\n")
+        print("Waiting for file via DTN...")
+        value = "bprecvfile ipn:1.1"
+        os.system('bprecvfile ipn:1.1 1')
+        if os.path.exists("testfile1"):
+            print("File Received via DTN...")
+    
+    time.sleep(10)
+    
 if __name__ == '__main__':
     run_quickstart()
 ```
@@ -106,13 +119,16 @@ Start ION in both `host 1` and `host 2`. Once ION has started in both servers, e
 
 Server 2
 ````
+$ ionstart -I host2.rc
 $ bpsendfile ipn:2.1 ipn:1.1 name_of_image.jpeg
 ````
 
 Server 1
 ````
-$ bprecvfile ipn:1.1 1
+$ ionstart -I host1.rc
+$ python3 vision.py
 ````
+
 
 
 
