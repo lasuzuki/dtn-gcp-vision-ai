@@ -28,22 +28,22 @@ Your project must enable the Vision API to accept requests. In the previous tuto
 
 In your VM instance, execute the following command:
 ````
-pip3 install --upgrade pip
+$ pip3 install --upgrade pip
 ````
 
 Then, install setup tools:
 ````
-sudo pip3 install setuptools==49.6.0
+$ sudo pip3 install setuptools==49.6.0
 ````
 
 Install grpcio using: 
 ````
-pip3 install --no-cache-dir --force-reinstall -Iv grpcio==1.29
+$ pip3 install --no-cache-dir --force-reinstall -Iv grpcio==1.29
 ````
 
 Finally, install google-cloud-vision
 ````
-pip3 install -U google-cloud-vision
+$ pip3 install -U google-cloud-vision
 ````
 
 ## The python code
@@ -51,66 +51,68 @@ pip3 install -U google-cloud-vision
 The `vision.py` file formats your request information, like the request type and content. Requests to the Vision API are provided as JSON objects. See the Vision API Reference for complete information on the specific structure of such a request [here](https://cloud.google.com/vision/docs/reference/rest). Your JSON request is only sent when you call execute. This pattern allows you to pass around such requests and call execute as needed.
 
 ```python
-import os
-import shutil
-import os.path
-import time
-import io
-from datetime import datetime
+def run_quickstart():
+    # [START vision_quickstart]
+    import io
+    import os
+    import shutil
+    from datetime import datetime
     # Imports the Google Cloud client library
     # [START vision_python_migration_import]
-from google.cloud import vision
+    from google.cloud import vision
+    # [END vision_python_migration_import]
 
-while True:
-
-#path = os.path.abspath('testfile1'
+    #Check if testfile1 was received from host 1
     if os.path.exists("testfile1"):
-        print("File Found")
+        print("Executing Vision API...")
         now = datetime.now()
-
+        # [START vision_python_migration_client]
         client = vision.ImageAnnotatorClient()
-    # [END vision_python_migration_client]
 
-    # The name of the image file to annotate
+        # The name of the image file to annotate
         file_name = os.path.abspath('testfile1')
 
-    # Loads the image into memory
+        # Loads the image into memory
         with io.open(file_name, 'rb') as image_file:
             content = image_file.read()
 
         image = vision.Image(content=content)
 
-    # Performs label detection on the image file
+        # Performs label detection on the image file
         response = client.label_detection(image=image)
         labels = response.label_annotations
-
-        print('Labels:')
+        x = len(labels)
+        os.system(f"echo Identified '{x}' Labels in the image...")
+        print("Sending Labels via DTN...")
         for label in labels:
-        #print(label.description)
+            #Send labels to host 2 via DTN
             os.system(f'echo "{label.description}" | bpsource ipn:2.1')
-    # [END vision_quickstart]
         name = "file" + str(int(datetime.timestamp(now)))
         os.rename('testfile1',name) 
-        path =  "/home/larissasuzuki/ion-open-source-4.0.1/dtn/processed/"
-    #if path.exists("testfile1"):
-        # get the path to the file in the current directory
-        #src = path.realpath("guru99.txt");
-                
-        # rename the original file
-        #os.rename('guru99.txt','career.guru99.txt') 
+        path =  "/home/usr/ion-open-source-4.0.1/dtn/processed/"
         shutil.move(name, path)
 
-    else:
-        print("Waiting for file via DTN")
-        value = "bprecvfile ipn:1.1"
-        os.system('bprecvfile ipn:1.1 1')
-        if os.path.exists("testfile1"):
-            print("File Received via DTN")
-    
-    time.sleep(10)
+if __name__ == '__main__':
+    run_quickstart()
 ```
 
+## The ION Configuration Files
 
+The ION Configuration Files can be found in the repo [dtn-gcp](https://github.com/lasuzuki/dtn-gcp/tree/main/rcfiles). 
+
+## The ION execution
+
+Start ION in both `host 1` and `host 2`. Once ION has started in both servers, execute the following commands:
+
+Server 2
+````
+$ bpsendfile ipn:2.1 ipn:1.1 name_of_image.jpeg
+````
+
+Server 1
+````
+$ bprecvfile ipn:1.1 1
+````
 
 
 
