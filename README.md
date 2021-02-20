@@ -51,19 +51,19 @@ $ pip3 install -U google-cloud-vision
 The `vision.py` file formats your request information, like the request type and content. Requests to the Vision API are provided as JSON objects. See the Vision API Reference for complete information on the specific structure of such a request [here](https://cloud.google.com/vision/docs/reference/rest). Your JSON request is only sent when you call execute. This pattern allows you to pass around such requests and call execute as needed.
 
 ```python
-def run_quickstart():
+def run_vision():
     import os
-import shutil
-import os.path
-import time
-import io
-from datetime import datetime
+    import shutil
+    import os.path
+    import time
+    import io
+    from datetime import datetime
     # Imports the Google Cloud client library
     # [START vision_python_migration_import]
-from google.cloud import vision
+    from google.cloud import vision
 
-os.system('killm')
-os.system('ionstart -I host1.rc')
+    os.system('ionstop')
+    os.system('ionstart -I host1.rc')
     
     if os.path.exists("testfile1"):
         print("Executing Vision API...")
@@ -106,7 +106,7 @@ os.system('ionstart -I host1.rc')
     time.sleep(10)
     
 if __name__ == '__main__':
-    run_quickstart()
+    run_vision()
 ```
 
 ## The ION Configuration Files
