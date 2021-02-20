@@ -51,7 +51,6 @@ $ pip3 install -U google-cloud-vision
 The `vision.py` file formats your request information, like the request type and content. Requests to the Vision API are provided as JSON objects. See the Vision API Reference for complete information on the specific structure of such a request [here](https://cloud.google.com/vision/docs/reference/rest). Your JSON request is only sent when you call execute. This pattern allows you to pass around such requests and call execute as needed.
 
 ```python
-def run_vision():
     import os
     import shutil
     import os.path
@@ -59,12 +58,19 @@ def run_vision():
     import io
     from datetime import datetime
     # Imports the Google Cloud client library
-    # [START vision_python_migration_import]
     from google.cloud import vision
+```
 
+Within the python code we can start ION.
+
+```python
     os.system('ionstop')
     os.system('ionstart -I host1.rc')
-    
+```
+
+When `host 2` executes the command `bpsendfile`, it will send a file to `host 1` named `testfile1`. Therefore, we firstly check for the existence of the `testfile1` to then process the image using the Cloud Vision API. Once the file is found it is loaded into memory and it is passed to the Vision API. The response type is JSON. The labels can be sent from `host 1` to `host 2` using the `bpsource` command.
+
+```python
     if os.path.exists("testfile1"):
         print("Executing Vision API...")
         now = datetime.now()
@@ -90,23 +96,6 @@ def run_vision():
         for label in labels:
         #Send the number of image labels to host 2
             os.system(f'echo "{label.description}" | bpsource ipn:2.1')
- 
-        name = "file" + str(int(datetime.timestamp(now)))
-        os.rename('testfile1',name) 
-        path =  "/home/larissasuzuki/ion-open-source-4.0.1/dtn/processed/"
-    
-    else:
-        print("\n")
-        print("Waiting for file via DTN...")
-        value = "bprecvfile ipn:1.1"
-        os.system('bprecvfile ipn:1.1 1')
-        if os.path.exists("testfile1"):
-            print("File Received via DTN...")
-    
-    time.sleep(10)
-    
-if __name__ == '__main__':
-    run_vision()
 ```
 
 ## The ION Configuration Files
