@@ -119,7 +119,7 @@ $ python3 vision.py
 
 The screenshot of the terminal running the scripts can be found below. The image processed in this example can be found [here](https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.latimes.com%2Fentertainment%2Fmovies%2Fla-et-mn-a-dogs-purpose-canine-business-20170126-story.html&psig=AOvVaw3X1qO7P1Zq4lvq3Gf3wZPW&ust=1613949026760000&source=images&cd=vfe&ved=0CAIQjRxqFwoTCLji1-fK-e4CFQAAAAAdAAAAABAE).
 
-<img src="https://github.com/lasuzuki/dtn-gcp-vision-ai/blob/main/vision.png" width=400 align=center>
+<img src="https://github.com/lasuzuki/dtn-gcp-vision-ai/blob/main/vision.png" width=600 align=center>
 
 
 
