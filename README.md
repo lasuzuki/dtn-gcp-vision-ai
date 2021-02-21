@@ -12,7 +12,7 @@ This project has been developed by Dr Lara Suzuki :woman_technologist: [![Twitte
 
 ## Introduction
 
-In this project follow on the repo which covers how to run DTN on Google Cloud using NASA's implementation of the bundle protocol - ION. The repo can be found [here](https://github.com/lasuzuki/dtn-gcp)
+In this project follow on the repo which covers how to run DTN on Google Cloud using NASA's implementation of the bundle protocol - ION. The repo can be found [here](https://github.com/lasuzuki/dtn-gcp-2nodes).
 
 In this new tutorial we introduce the use of Google API service for Vision. Cloud Vision API enables developers to understand the content of an image by encapsulating powerful machine learning models in an easy-to-use REST API. It quickly classifies images into thousands of categories (such as, “sailboat”), detects individual objects and faces within images, and reads printed words contained within images. 
 
