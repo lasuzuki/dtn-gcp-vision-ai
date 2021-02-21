@@ -31,21 +31,22 @@ def run_vision():
         # Performs label detection on the image file
         response = client.label_detection(image=image)
         labels = response.label_annotations
+        
         x = len(labels)
         os.system(f"echo Identified '{x}' Labels in the image...")
         print("Sending Labels via DTN...")
+        
         for label in labels:
         #Send the number of image labels to host 2
             os.system(f'echo "{label.description}" | bpsource ipn:2.1')
- 
+            
         name = "file" + str(int(datetime.timestamp(now)))
         os.rename('testfile1',name) 
-        path =  "/home/larissasuzuki/ion-open-source-4.0.1/dtn/processed/"
+        path =  "~/dtn/processed/"
     
     else:
         print("\n")
         print("Waiting for file via DTN...")
-        value = "bprecvfile ipn:1.1"
         os.system('bprecvfile ipn:1.1 1')
         if os.path.exists("testfile1"):
             print("File Received via DTN...")
